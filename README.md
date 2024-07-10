@@ -20,15 +20,13 @@ Gmail 회원가입에 대한 테스트코드를 포트폴리오로 제작하였�
 
 ---
 
-총 실행대상 테스트케이스는 **77개** (web : 76개 / aos : 1개) 입니다. 우선적으로 **web을 구현**하였으며 
-aos는 테스트케이스 내에서 페이지클래스의 객체 생성 시 `platform` 파라미터를 넘겨주는 것으로 로케이터 클래스를 구분해서 동작하도록 만들었습니다. web과 aos의 구글회원가입 페이지는 UI가 동일하여 
-로케이터만 수정되면 기존에 web 기준으로 작성한 메소드들은 대부분 동작할 수 있는 것으로 확인하였습니다. 그래서 aos도 도출가능한 케이스들을 전부 도출하고 작성하기 보다는, happy case만 작성하였고, happy case 이외의 케이스의 작성은 생략하였습니다.
+총 실행대상 테스트케이스는 **76개**  입니다. 우선적으로 **web을 구현**하였으며 
+드라이버 생성 자체는 Android에 대해서 페이지클래스의 객체 생성 시 `platform` 파라미터를 넘겨주는 것으로 로케이터 클래스를 구분해서 동작할 수 있도록 만들었습니다.
 
 전체 실행하는데 시간이 조금 소요되는 관계로, happy case를 우선적으로 실행하시면 좋을 것 같습니다. 
 혹시나 실행에 제약이 있을 수 있어서 web/aos의 happycase를 녹화한 영상을 링크로 제공해드리고자 합니다.
 
-- [web happycase](https://drive.google.com/file/d/1Ilt48ckCI0YjEDby0Dvi_CerffHIZ_SF/view?usp=share_link)
-- [aos happycase](https://drive.google.com/file/d/1RO8FZCv3VJdOEuzFhBrXbg8iI6gJHOR2/view?usp=share_link)
+- [web happycase](https://drive.google.com/file/d/1qk7nR_haexhqLKxII1j6isccd23CbLVn/view?usp=drive_link)
 
 감사합니다. 
 
@@ -79,16 +77,11 @@ pip3 install -r requirements.txt
 #### web
 `pytest -s -v ./tests/run/web --platform=web --alluredir=./report --color=no`
 
-#### AOS app
-안드로이드를 실행하시고자 하는 경우에는 일단 안드로이드 기기가 연결되어있는 상태에서 위 전제조건 이외에도 로컬에서 `appium server` 를 실행해주셔야합니다. `appium`은 npm 을 통해 설치가 가능합니다.
-
-`pytest -s -v ./tests/run/android --platform=android --alluredir=./report --color=no`
 
 Happy case만 실행하고자 하신다면 아래 커맨드를 이용해주세요.
 
 - web : `pytest -s -v ./tests/run/web/test_google_signup_happycase.py --platform=web --alluredir=./report --color=no`
 
-- aos : `pytest -s -v ./tests/run/android/test_google_signup_happycase.py --platform=web --alluredir=./report --color=no`
 
 ---
 
@@ -104,16 +97,6 @@ Happy case만 실행하고자 하신다면 아래 커맨드를 이용해주세�
 ├── resources
 │   └── desired_capabilities.ini
 ├── src
-│   ├── android
-│   │   ├── locators
-│   │   │   ├── gmail_home_page_locator.py
-│   │   │   ├── gmail_login_page_locator.py
-│   │   │   └── google_signup_page_locator.py
-│   │   └── pages
-│   │       └── gmail_home_page.py
-│   ├── base
-│   │   ├── google_login_page.py
-│   │   └── google_signup_page.py
 │   ├── base_page.py
 │   └── web
 │       ├── locators
@@ -122,10 +105,10 @@ Happy case만 실행하고자 하신다면 아래 커맨드를 이용해주세�
 │       │   └── google_signup_page_locator.py
 │       └── pages
 │           └── gmail_home_page.py
+│           ├── google_login_page.py
+│           └── google_signup_page.py
 ├── tests
 │   ├── run
-│   │   ├── android
-│   │   │   └── test_google_signup_happycase.py
 │   │   └── web
 │   │       ├── test_01_google_create_account.py
 │   │       ├── test_02_google_birthday_and_gender.py
@@ -151,7 +134,7 @@ Happy case만 실행하고자 하신다면 아래 커맨드를 이용해주세�
 모든 페이지의 기본적인 동작들을 따로 정의한 `BasePage` 라는 클래스를 만들었습니다. 이 클래스는 모든 페이지에서 상속받도록 하여 어떤 element를 찾는 동작은 물론,
 click, input등의 기본적인 동작들도 재사용할 수 있도록 하였습니다.
 
-![BasePage의 상속관계](https://velog.velcdn.com/images/dahunyoo/post/d832cb5d-e558-4bac-8dc3-10fc44f6cf78/image.png)
+![BasePage의 상속관계](https://velog.velcdn.com/images/dahunyoo/post/50523a6e-a712-4aa7-9b58-2fa6c57a11d4/image.png)
 <p align="center"> BasePage의 상속관계 </p>
 
 
@@ -210,23 +193,10 @@ class GoogleSignUpPageLocator():
 튜플의 형태로 사용한 것은, `wait`를 이용한 element 조작시에는 locator를 튜플의 형태로 넘겨야했기 때문에 튜플로 생성하였습니다. 만약 `driver` 를 이용한 element조작이 필요하다면, 로케이터를 사용할 때에 `*` 를 붙여 Unpacking해야합니다. (BasePage 사용 부분의 [예시코드](#basepage-상속)를 확인해주세요.)
 
 
-`base` 디렉토리 하위에는 web과 aos 둘 다 사용하는 구글로그인페이지, 구글회원가입페이지가 위치해있습니다. 구글회원가입페이지(_GoogleSignUpPage_)의 경우에는 개별적으로 분리된 페이지로 인식할만한 요소들이 존재하긴 하나, 본 과제에서는 하나의 페이지 클래스로 정리하였습니다.
-
-구글로그인페이지(_GoogleLoginPage_)와 구글회원가입페이지(_GoogleSignUpPage_)는, web과 android 둘 다 동일한 화면구성과 조작방법으로 되어있습니다. 따라서 최대한 플랫폼이 달라도 코드를 재사용할 수 있도록 고안하였습니다.
-
-`base` 디렉토리 하위의 구글로그인페이지(_GoogleLoginPage_), 구글회원가입페이지(_GoogleSignUpPage_)의 페이지클래스들은,
-`tests/run` 하위의, 실제 실행되는 테스트케이스들에서 페이지객체가 생성될때, 생성자로 `platform` 파라미터를 전달받아 플랫폼별로 로케이터를 생성을 다르게 할 수 있도록 하였습니다.
-단순히 로케이터만 바꾸어도 조작이 되지 않는 흐름의 경우에는, 직접 메소드 내에서 `platform`으로 분기처리를 하여 조작흐름을 다르게 구분하였습니다.
-
-![](https://velog.velcdn.com/images/dahunyoo/post/759e76a5-f21c-48d5-8919-6d4efc9c5eb8/image.png)
-
-
 ```python
 import time
 from src.base_page import BasePage
 from src.web.locators.google_signup_page_locator import GoogleSignUpPageLocator as WebGoogleSignUpPageLocator
-from src.android.locators.google_signup_page_locator import GoogleSignUpPageLocator as MobileGoogleSignUpPageLocator
-from appium.webdriver.common.appiumby import AppiumBy
 
 class GoogleSignUpPage(BasePage):
     """
@@ -240,11 +210,7 @@ class GoogleSignUpPage(BasePage):
         self.custom_gender_flag = False
         self.platform = platform
 
-        # 전달받은 platform 파라미터에 따라 생성하는 로케이터가 다르도록 했습니다. platform 파라미터는 pytest를 실행할 때부터 전달받습니다.
-        if platform == "web":
-            self.locator = WebGoogleSignUpPageLocator()
-        else: #android
-            self.locator = MobileGoogleSignUpPageLocator()
+        self.locator = WebGoogleSignUpPageLocator()
             
     def input_lastname(self, lastname: str):
         """
@@ -263,13 +229,7 @@ class GoogleSignUpPage(BasePage):
         :return:
         """
         time.sleep(0.3)
-        if self.platform == "web":
-
-            self._get_select_tag_element(self.locator.SELECT_MONTH_FIELD).select_by_value(month)
-
-        else: #Android 인 경우
-            self._click(self.locator.SELECT_MONTH_FIELD)
-            self._click((AppiumBy.XPATH, f"//android.widget.CheckedTextView[contains(@text, '{month}')]"))            
+        self._get_select_tag_element(self.locator.SELECT_MONTH_FIELD).select_by_value(month)          
 
 ```
 
@@ -278,8 +238,6 @@ class GoogleSignUpPage(BasePage):
 ```text
 ├── tests
 │   ├── run
-│   │   ├── android
-│   │   │   └── test_google_signup_happycase.py
 │   │   └── web
 │   │       ├── test_01_google_create_account.py
 │   │       ├── test_02_google_birthday_and_gender.py
@@ -302,8 +260,7 @@ class SuiteGmailSignUp:
     testsuite를 생성할 때 생성자를 통해 의존객체를 주입받습니다.
     """
 
-    def __init__(self, driver: WebDriver, home_page: Union[WebGmailHomePage, AppGmailHomePage],
-                 google_login_page: GoogleLoginPage, google_signup_page: GoogleSignUpPage):
+    def __init__(self, driver: WebDriver, home_page: WebGmailHomePage, google_login_page: GoogleLoginPage, google_signup_page: GoogleSignUpPage):
         self.driver = driver
         self.__home_page = home_page
         self.__google_login_page = google_login_page
@@ -423,7 +380,7 @@ def setup_and_teardown(request) -> webdriver:
 `web`의 경우 드라이버는 `webdriver_manager` 라이브러리를 사용하여 코드가 실행될 로컬 컴퓨터의 크롬버전에 맞추어 자동으로 드라이버가 설치되도록 하였습니다.
 만일 로컬이 아니라 리모트나 별도의 device farm으로의 실행이 필요한 경우에는 아래 첨부한 코드중 `url_manager()` 에서 추가적인 분기처리를 할 수 있을 것입니다.
 
-
+**현재 본 포트폴리오에서는 `android`의 경우는 드라이버 생성로직만 있으며 페이지클래스 및 테스트파일은 제거되어있는 상태입니다.**
 
 ```python
 # utilities.py
@@ -536,13 +493,7 @@ APP_PACKAGE = com.google.android.gm
 
 
 ### Happy case
-해피케이스는 web / aos 각각 1건씩 작성되어있습니다.
-- `tests/run/android/test_google_signup_happycase.py`
 - `tests/run/web/test_google_signup_happycase.py`
-
-해피케이스는 web/aos 구분에 따라 초기 실행 단계에 참조하는 객체에 차이가 있을뿐, 실행시나리오는 동일합니다. 각각의 화면에서, 입력값에 대해 정상적으로 다음페이지로 이동할 수 있는 임의의 값을 입력하고, 다음페이지로 넘어가는 흐름입니다.
-
-각각의 assert 포인트에 대해서는 `tests/suite/suite_gmail_signup.py` 에서 확인해주시면 감사하겠습니다.
 
 #### web
 | No | Testcase method name                                  | remarks                                                                |
@@ -555,16 +506,6 @@ APP_PACKAGE = com.google.android.gm
 | 6  | step_check_and_create_password                        | `안전한 비밀번호 만들기` 화면의 헤더텍스트를 확인하고, 비밀번호와 비밀번호 확인란에 임의의 패스워드를 입력한다.        |
 | 7  | step_check_phone_number_verification_title            | `보안문자 입력` 화면의 헤더텍스트를 확인한다.                                             |
 
-#### app
-| No | Testcase method name                                  | remarks                                                                |
-|----|-------------------------------------------------------|------------------------------------------------------------------------|
-| 1  | step_check_gmail_home_and_go_login_page_on_mobile_app | Gmail앱이 실행되면 확인 > 이메일 주소 추가 > 이메일 설정(Google) 을 거쳐 구글로그인페이지로 이동한다.      |
-| 2  | step_check_login_page_and_click_create_account_button | 로그인페이지 내의 헤더텍슽르르 확인하고 개인용 계정만들기 버튼을 누른다.                               |
-| 3  | step_check_and_input_name                             | `Google 계정만들기` 화면의 헤더텍스트를 확인하고 성과 이름을 입력한다.                            |
-| 4  | step_check_and_input_birthday_and_gender              | `기본 정보` 화면의 헤더텍스트를 확인하고 생년월일과 성별 기본값을 입력한다.                            |
-| 5  | step_check_and_create_mail_address                    | `Gmail 주소 선택하기` 화면의 헤더텍스트를 확인하고, `내 Gmail 주소 만들기` 를 클릭하여 임의의 주소를 입력한다. |
-| 6  | step_check_and_create_password                        | `안전한 비밀번호 만들기` 화면의 헤더텍스트를 확인하고, 비밀번호와 비밀번호 확인란에 임의의 패스워드를 입력한다.        |
-| 7  | step_check_phone_number_verification_title            | `보안문자 입력` 화면의 헤더텍스트를 확인한다.                                             |
 
 ### `Google 계정만들기` 단계
 `Google 계정만들기` 단계에서부터 수행하는 테스트케이스는 `platform` 파라미터를 이용하여 로케이터를 구분해주면 테스트케이스 자체는 플랫폼 관계없이 동일하게 수행가능한 상태입니다. 
@@ -659,7 +600,6 @@ APP_PACKAGE = com.google.android.gm
 
 
 ### `Gmail 주소 선택하기` 단계
-본 단계 역시 `platform` 파라미터를 통해 로케이터만 바꾸어주면 aos에서도 web과 동일하게 테스트할 수 있으므로, aos케이스 작성은 생략하였습니다.
 
 - `tests/run/web/test_03_google_mail_address.py`
 
@@ -686,7 +626,6 @@ APP_PACKAGE = com.google.android.gm
 
 
 ### `안전한 비밀번호 만들기` 단계
-본 단계 역시 `platform` 파라미터를 통해 로케이터만 바꾸어주면 aos에서도 web과 동일하게 테스트할 수 있으므로, aos케이스 작성은 생략하였습니다.
 
 - `tests/run/web/test_04_google_password.py`
 

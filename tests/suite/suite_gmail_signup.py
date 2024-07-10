@@ -3,9 +3,8 @@ import time
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from src.web.pages.gmail_home_page import GmailHomePage as WebGmailHomePage
-from src.base.google_login_page import GoogleLoginPage
-from src.base.google_signup_page import GoogleSignUpPage
-from src.android.pages.gmail_home_page import GmailHomePage as AppGmailHomePage
+from src.web.pages.google_login_page import GoogleLoginPage
+from src.web.pages.google_signup_page import GoogleSignUpPage
 
 from typing import Union
 
@@ -17,8 +16,7 @@ class SuiteGmailSignUp:
     testsuite를 생성할 때 생성자를 통해 의존객체를 주입받습니다.
     """
 
-    def __init__(self, driver: WebDriver, home_page: Union[WebGmailHomePage, AppGmailHomePage],
-                 google_login_page: GoogleLoginPage, google_signup_page: GoogleSignUpPage):
+    def __init__(self, driver: WebDriver, home_page: WebGmailHomePage, google_login_page: GoogleLoginPage, google_signup_page: GoogleSignUpPage):
         self.driver = driver
         self.__home_page = home_page
         self.__google_login_page = google_login_page

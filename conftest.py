@@ -73,8 +73,8 @@ def pytest_runtest_makereport(item, call):
         _test_failed_incremental.setdefault(cls_name, {}).setdefault(
             parametrize_index, test_name
         )
-        # allure.attach(
-        #     item.cls.driver.get_screenshot_as_png(),
-        #     "Screenshot",
-        #     attachment_type=AttachmentType.PNG
-        # )
+        allure.attach(
+            item.cls.driver.get_screenshot_as_png(),
+            "Screenshot",
+            attachment_type=AttachmentType.PNG
+        )

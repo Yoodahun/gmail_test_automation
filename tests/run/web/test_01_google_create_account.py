@@ -1,7 +1,7 @@
 from tests.suite.suite_gmail_signup import SuiteGmailSignUp
 from src.web.pages.gmail_home_page import GmailHomePage
-from src.base.google_login_page import GoogleLoginPage
-from src.base.google_signup_page import GoogleSignUpPage
+from src.web.pages.google_login_page import GoogleLoginPage
+from src.web.pages.google_signup_page import GoogleSignUpPage
 
 
 class Test01GoogleCreateAccount:

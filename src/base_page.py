@@ -18,7 +18,7 @@ class BasePage:
     """
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 3)
+        self.wait = WebDriverWait(driver, 10)
         self.logger = logger_factory(type(self).__name__)
 
     def _find_element(self, locator: tuple) -> WebElement:

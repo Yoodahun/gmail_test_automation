@@ -4,7 +4,6 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from src.base_page import BasePage
 from src.web.locators.google_signup_page_locator import GoogleSignUpPageLocator as WebGoogleSignUpPageLocator
-from src.android.locators.google_signup_page_locator import GoogleSignUpPageLocator as MobileGoogleSignUpPageLocator
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from appium.webdriver.common.appiumby import AppiumBy
@@ -21,11 +20,7 @@ class GoogleSignUpPage(BasePage):
         super().__init__(driver)
         self.custom_gender_flag = False
         self.platform = platform
-
-        if platform == "web":
-            self.locator = WebGoogleSignUpPageLocator()
-        else:
-            self.locator = MobileGoogleSignUpPageLocator()
+        self.locator = WebGoogleSignUpPageLocator()
 
     def check_title_text(self, header_text: str) -> bool:
         """
@@ -111,13 +106,8 @@ class GoogleSignUpPage(BasePage):
         :return:
         """
         time.sleep(0.3)
-        if self.platform == "web":
 
-            self._get_select_tag_element(self.locator.SELECT_MONTH_FIELD).select_by_value(month)
-
-        else:
-            self._click(self.locator.SELECT_MONTH_FIELD)
-            self._click((AppiumBy.XPATH, f"//android.widget.CheckedTextView[contains(@text, '{month}')]"))
+        self._get_select_tag_element(self.locator.SELECT_MONTH_FIELD).select_by_value(month)
 
     def input_day(self, day: str = "7"):
         """
@@ -139,21 +129,15 @@ class GoogleSignUpPage(BasePage):
         """
         time.sleep(0.3)
 
-        if self.platform == "web":
+        self._get_select_tag_element(self.locator.SELECT_GENDER_FIELD).select_by_visible_text(gender)
 
-            self._get_select_tag_element(self.locator.SELECT_GENDER_FIELD).select_by_visible_text(gender)
-
-            if gender == "맞춤":
-                self.custom_gender_flag = True
-                self._find_element_for_wait(self.locator.INPUT_CUSTOM_GENDER_FIELD).find_element(By.TAG_NAME,
-                                                                                                 "input").send_keys(
-                    custom_gender)
-                if gender_pronoun != "":
-                    self._get_select_tag_element((By.ID, "genderpronoun")).select_by_visible_text(gender_pronoun)
-
-        else:
-            self._click(self.locator.SELECT_GENDER_FIELD)
-            self._click((AppiumBy.XPATH, f"//android.widget.CheckedTextView[contains(@text, '{gender}')]"))
+        if gender == "맞춤":
+            self.custom_gender_flag = True
+            self._find_element_for_wait(self.locator.INPUT_CUSTOM_GENDER_FIELD).find_element(By.TAG_NAME,
+                                                                                             "input").send_keys(
+                custom_gender)
+            if gender_pronoun != "":
+                self._get_select_tag_element((By.ID, "genderpronoun")).select_by_visible_text(gender_pronoun)
 
     def create_my_gmail_address(self, mail_address: str):
         """
@@ -171,11 +155,10 @@ class GoogleSignUpPage(BasePage):
         :param password: str
         :return:
         """
-        if self.platform == "web":
-            self.input_password(password)
-            self.input_password_again(password)
-        else:
-            self.input_password(password)
+
+        self.input_password(password)
+        self.input_password_again(password)
+
 
     def input_password(self, password: str):
         """
@@ -302,8 +285,6 @@ class GoogleSignUpPage(BasePage):
         self.logger.info(locator)
         try:
             element = self._find_element_for_wait(locator)
-            self.logger.info(element.is_displayed())
-            self.logger.info(element.text)
             return element.is_displayed() and text in element.text
         except TimeoutException:
             return False
