@@ -24,7 +24,7 @@ Gmail 회원가입에 대한 테스트코드를 포트폴리오로 제작하였�
 드라이버 생성 자체는 Android에 대해서 페이지클래스의 객체 생성 시 `platform` 파라미터를 넘겨주는 것으로 로케이터 클래스를 구분해서 동작할 수 있도록 만들었습니다.
 
 전체 실행하는데 시간이 조금 소요되는 관계로, happy case를 우선적으로 실행하시면 좋을 것 같습니다. 
-혹시나 실행에 제약이 있을 수 있어서 web/aos의 happycase를 녹화한 영상을 링크로 제공해드리고자 합니다.
+혹시나 실행에 제약이 있을 수 있어서 web의 happycase를 녹화한 영상을 링크로 제공해드리고자 합니다.
 
 - [web happycase](https://drive.google.com/file/d/1qk7nR_haexhqLKxII1j6isccd23CbLVn/view?usp=drive_link)
 
@@ -124,9 +124,7 @@ Happy case만 실행하고자 하신다면 아래 커맨드를 이용해주세�
 
 
 ## 프로젝트 설계
-본 프로젝트는 _Page Object Design_ 을 이용하였습니다. `src` 폴더 하위에 모든 페이지의 베이스가 될 `BasePage`가 존재하고, 그 외 `web`, `android` 디렉토리 하위에는 각각 플랫폼별 고유한 페이지들을 클래스로 만들었습니다.
-
-`base` 폴더 하위에 존재하는 `google_login_page`(구글로그인페이지), `google_signup_page`(구글 회원가입페이지) 는 web과 aos 둘 다 UI가 동일하여 로케이터만 바꿔 사용하고 페이지 클래스 자체는 그대로 재사용하도록 하였습니다.
+본 프로젝트는 _Page Object Design_ 을 이용하였습니다. `src` 폴더 하위에 모든 페이지의 베이스가 될 `BasePage`가 존재하고, 그 외 `web` 디렉토리 하위에 페이지들을 클래스로 만들었습니다.
 
 프로젝트를 작성하면서 신경 쓴 부분은 **코드의 재사용성** 입니다.
 
