@@ -26,7 +26,7 @@ Gmail 회원가입에 대한 테스트코드를 포트폴리오로 제작하였�
 전체 실행하는데 시간이 조금 소요되는 관계로, happy case를 우선적으로 실행하시면 좋을 것 같습니다. 
 혹시나 실행에 제약이 있을 수 있어서 web의 happycase를 녹화한 영상을 링크로 제공해드리고자 합니다.
 
-- [web happycase](https://drive.google.com/file/d/1qk7nR_haexhqLKxII1j6isccd23CbLVn/view?usp=drive_link)
+- [web happycase](https://drive.google.com/file/d/1qk7nR_haexhqLKxII1j6isccd23CbLVn/view?usp=sharing)
 
 감사합니다. 
 
